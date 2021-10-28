@@ -20,12 +20,26 @@ async function run() {
 
         const database = client.db("volunteer_network");
         const catagoryCollection = database.collection('catagories');
+        const registeredCatagoryCollection = database.collection("registeredCatagory");
 
         app.get('/catagories', async(req, res) => {
             const cursor = catagoryCollection.find({});
             const result = await cursor.toArray();
             res.send(result);
         })
+
+        app.post('/registered', async(req, res) => {
+            const registeredCatagories = req.body;
+            const result = await registeredCatagoryCollection.insertOne(registeredCatagories);
+            res.json(result); 
+        })
+
+        // app.post('/registered/byMail', async(req, res) => {
+        //     const mail = req.body;
+        //     const query = {email:{$in: mail}}
+        //     const events = await registeredCatagoryCollection.find(query).toArray();
+        //     res.json(events);
+        // })
     }
     finally {
         // await client.close();
